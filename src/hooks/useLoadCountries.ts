@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import * as Location from 'expo-location';
+import {
+  requestForegroundPermissionsAsync,
+  getCurrentPositionAsync,
+  LocationObject,
+} from 'expo-location';
 
 import CONFIG from 'config';
 import useStore from 'src/stores/global-store';
@@ -7,13 +11,15 @@ import client from 'src/api/weather-client';
 import { CountryType } from 'types';
 
 /**
- * useLoadCountries should load the data from all countries
- * inside of the config file and the async storage into the mainStore.
+ * useLoadCountries should init the data from all local sources such as
+ * the config file (default countries), the async storage into the mainStore,
+ * and the users locoation.
  */
 
 const useLoadCountries = () => {
-  const populateCountryList = useStore((store) => store.populateCountryList);
-  const [location, setLocation] = useState<null | unknown>(null);
+  const populateCountryList = useStore((state) => state.populateCountryList);
+  const addCountry = useStore((state) => state.addCountry);
+  const [userLocation, setUserLocation] = useState<null | LocationObject>(null);
   const [errorMsg, setErrorMsg] = useState<null | string>(null);
   const { defaultLocations } = CONFIG;
 
@@ -25,7 +31,18 @@ const useLoadCountries = () => {
     return locationIds;
   };
 
-  const fetchCountriesDataByCoords = () => {};
+  const fetchUserLocataionData = async (lat: number, lon: number) => {
+    try {
+      const request = await client.get('weather', {
+        params: { lat, lon },
+      });
+
+      const { main, coord, id, name } = request.data;
+      addCountry({ main, coord, id, name, userLocationData: true });
+    } catch (err) {
+      console.log(err, 'err');
+    }
+  };
 
   const fetchCountriesDataById = async (locationIds: string) => {
     try {
@@ -51,15 +68,24 @@ const useLoadCountries = () => {
   };
 
   const getLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       setErrorMsg('Permission to access location was denied');
       return;
     }
 
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
+    const location = await getCurrentPositionAsync({});
+    setUserLocation(location);
   };
+
+  useEffect(() => {
+    if (userLocation) {
+      fetchUserLocataionData(
+        userLocation.coords.latitude,
+        userLocation.coords.longitude
+      );
+    }
+  }, [userLocation]);
 
   useEffect(() => {
     const locationsIds = formatLocationIds(defaultLocations);

@@ -1,22 +1,21 @@
 import React from 'react';
-
 import { ThemeProvider } from 'styled-components';
+
 import MainRouter from 'src/navigators';
 import MainSafeAreaView from 'src/components/main-safe-area-view';
 import ErrorBoundary from 'src/hoc/error-boundary';
-
-import theme from 'theme';
 import useLoadContries from 'src/hooks/useLoadCountries';
+import theme from 'theme';
 
 export default function App() {
   useLoadContries();
   return (
     <ThemeProvider theme={theme}>
-      <ErrorBoundary>
-        <MainSafeAreaView>
+      <MainSafeAreaView>
+        <ErrorBoundary>
           <MainRouter />
-        </MainSafeAreaView>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </MainSafeAreaView>
     </ThemeProvider>
   );
 }

@@ -23,6 +23,7 @@ const getColors = () => {
 
 const theme: DefaultTheme = {
   borderRadius: 4,
+  defaultMargin: 4,
   defaultPadding: 8,
   textSize: 16,
   colors: getColors(),
