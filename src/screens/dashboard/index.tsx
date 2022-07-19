@@ -1,15 +1,16 @@
 import React from 'react';
+import { FlatList } from 'react-native';
 
-import Text from 'src/components/text';
 import MainView from 'src/components/main-view';
 import useDashboardLogic from './hooks/useDashboardLogic';
+import countryItem from './components/country-item';
 
 const Dashboard = () => {
-  const {} = useDashboardLogic();
+  const { countryList } = useDashboardLogic();
 
   return (
     <MainView>
-      <Text>Navigation Test Dashboard</Text>
+      <FlatList renderItem={countryItem} data={countryList} />
     </MainView>
   );
 };

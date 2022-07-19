@@ -1,7 +1,9 @@
-import React from 'react';
+import useStore from 'src/stores/global-store';
 
 const useDashboardLogic = () => {
-  return {};
+  const { countryList } = useStore();
+
+  return { countryList };
 };
 
 export default useDashboardLogic;
