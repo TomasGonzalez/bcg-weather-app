@@ -10,7 +10,11 @@ const Dashboard = () => {
 
   return (
     <MainView>
-      <FlatList renderItem={countryItem} data={countryList} />
+      <FlatList
+        keyExtractor={(item) => `${item.name}`}
+        renderItem={countryItem}
+        data={countryList}
+      />
     </MainView>
   );
 };
