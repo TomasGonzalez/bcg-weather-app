@@ -9,6 +9,7 @@ const getColors = () => {
       primary: '#51557E',
       secondary: '#816797',
       contrast: '#D6D5A8',
+      text: '#DADDD8',
     };
 
   return {
@@ -16,12 +17,14 @@ const getColors = () => {
     primary: '#6EB8B8',
     secondary: '#C7DCB2',
     contrast: '#888888',
+    text: '#191923',
   };
 };
 
 const theme: DefaultTheme = {
   borderRadius: '4px',
   defaultPadding: '8px',
+  textSize: '16px',
   colors: getColors(),
 };
 
