@@ -2,9 +2,9 @@ import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    borderRadius: string;
-    defaultPadding: string;
-    textSize: string;
+    borderRadius: number;
+    defaultPadding: number;
+    textSize: number;
     colors: Record<string, string>;
   }
   export interface ThemeProps {

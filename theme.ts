@@ -22,9 +22,9 @@ const getColors = () => {
 };
 
 const theme: DefaultTheme = {
-  borderRadius: '4px',
-  defaultPadding: '8px',
-  textSize: '16px',
+  borderRadius: 4,
+  defaultPadding: 8,
+  textSize: 16,
   colors: getColors(),
 };
 

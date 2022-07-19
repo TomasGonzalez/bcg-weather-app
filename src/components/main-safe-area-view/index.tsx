@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const MainSafeAreaView = styled.SafeAreaView`
   display: flex;
   flex: 1;
-  padding-top: ${Platform.OS === 'android' ? StatusBar.currentHeight : 0};
+  padding-top: ${Platform.OS === 'android' ? StatusBar.currentHeight : 0}px;
 `;
 
 export default MainSafeAreaView;

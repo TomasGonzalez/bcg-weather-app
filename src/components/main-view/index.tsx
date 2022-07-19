@@ -6,7 +6,7 @@ const MainView = styled.View`
   display: flex;
   flex: 1;
   background-color: ${(props: ThemeProps) => props.theme.colors?.background};
-  padding: ${(props: ThemeProps) => props.theme.defaultPadding};
+  padding: ${(props: ThemeProps) => props.theme.defaultPadding}px;
 `;
 
 export default MainView;
