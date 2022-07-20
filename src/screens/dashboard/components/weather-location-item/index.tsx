@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import Text from 'src/components/text';
-import { CountryType } from 'types';
+import { WeatherLocationType } from 'types';
 import TemperatureDisplay from 'src/components/temperature-display';
 
 type StyledPropsType = { theme: DefaultTheme };
@@ -34,11 +34,11 @@ const CurrentLocationText = styled(Text)`
   font-size: 8px;
 `;
 
-const countryItem = ({
+const weatherLocationItem = ({
   item,
   onPress,
 }: {
-  item: CountryType;
+  item: WeatherLocationType;
   onPress: () => void;
 }) => (
   <MainTouchableOpacity onPress={onPress}>
@@ -54,4 +54,4 @@ const countryItem = ({
   </MainTouchableOpacity>
 );
 
-export default countryItem;
+export default weatherLocationItem;

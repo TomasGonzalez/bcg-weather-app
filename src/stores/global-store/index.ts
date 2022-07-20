@@ -1,14 +1,17 @@
 import create from 'zustand';
 
-import { CountryType } from 'types';
-import { CountryListType, StoreType } from './types';
+import { WeatherLocationType } from 'types';
+import { WeatherLocationListType, StoreType } from './types';
 
 const useStore = create<StoreType>()((set) => ({
-  countryList: null,
-  addCountry: (country: CountryType) =>
-    set((state) => ({ countryList: [...state.countryList, country] })),
-  populateCountryList: (newCountryList: CountryListType) =>
-    set({ countryList: newCountryList }),
+  weatherLocationList: null,
+  addWeatherLocation: (weatherLocation: WeatherLocationType) =>
+    set((state) => ({
+      weatherLocationList: [...state.weatherLocationList, weatherLocation],
+    })),
+  populateWeatherLocationList: (
+    newWeatherLocationList: WeatherLocationListType
+  ) => set({ weatherLocationList: newWeatherLocationList }),
 }));
 
 export default useStore;

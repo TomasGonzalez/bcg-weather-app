@@ -25,14 +25,14 @@ const SecondaryDataContainerView = styled.View`
 
 function Details() {
   const route = useRoute<RouteProp<RootStackParamList, 'Details'>>();
-  const { countryData } = route?.params;
+  const { weatherLocationData } = route?.params;
 
   return (
     <StyledMainView>
       <MainDataContainerView>
-        <Text>{countryData.sys.country}</Text>
-        <Text>{countryData.weather[0].description}</Text>
-        <TemperatureDisplay temperatureValue={countryData.main?.temp} />
+        <Text>{weatherLocationData.sys.weatherLocation}</Text>
+        <Text>{weatherLocationData.weather[0].description}</Text>
+        <TemperatureDisplay temperatureValue={weatherLocationData.main?.temp} />
       </MainDataContainerView>
       <SecondaryDataContainerView>
         <Text>secondary Data seciton</Text>

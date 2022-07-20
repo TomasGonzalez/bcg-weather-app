@@ -3,38 +3,39 @@ import { useNavigation } from '@react-navigation/native';
 
 import { ProfileScreenNavigationProp } from 'src/navigators/main-stack-navigator';
 import useStore from 'src/stores/global-store';
-import countryItem from '../components/country-item';
-import { CountryType } from 'types';
+import weatherLocationItem from '../components/weather-location-item';
+import { WeatherLocationType } from 'types';
 
 const useDashboardLogic = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  const { countryList } = useStore();
+  const { weatherLocationList } = useStore();
 
-  const goToDescription = (item: CountryType) => {
-    navigation.navigate('Details', { countryData: item });
+  const goToDescription = (item: WeatherLocationType) => {
+    navigation.navigate('Details', { weatherLocationData: item });
   };
 
   const renderItem = useCallback(
-    ({ item }: { item: CountryType }) =>
-      countryItem({ item, onPress: () => goToDescription(item) }),
+    ({ item }: { item: WeatherLocationType }) =>
+      weatherLocationItem({ item, onPress: () => goToDescription(item) }),
     [goToDescription]
   );
 
   const setCurrentLocationToFirst = useMemo(() => {
     const userLocationData =
-      countryList && countryList.find((item) => !!item?.isUserLocationData);
+      weatherLocationList &&
+      weatherLocationList.find((item) => !!item?.isUserLocationData);
 
-    const orderedCountryData = userLocationData
+    const orderedWeatherLocationData = userLocationData
       ? [
           userLocationData,
-          ...countryList.filter((item) => !item.isUserLocationData),
+          ...weatherLocationList.filter((item) => !item.isUserLocationData),
         ]
-      : countryList;
+      : weatherLocationList;
 
-    return orderedCountryData;
-  }, [countryList]);
+    return orderedWeatherLocationData;
+  }, [weatherLocationList]);
 
-  return { countryList: setCurrentLocationToFirst, renderItem };
+  return { weatherLocationList: setCurrentLocationToFirst, renderItem };
 };
 
 export default useDashboardLogic;

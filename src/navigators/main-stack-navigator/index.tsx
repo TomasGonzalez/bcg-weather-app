@@ -6,13 +6,13 @@ import {
 
 import Dashboard from 'src/screens/dashboard';
 import Details from 'src/screens/details';
-import { CountryType } from 'types';
+import { WeatherLocationType } from 'types';
 
 const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Dashboard: undefined;
-  Details: { countryData: CountryType };
+  Details: { weatherLocationData: WeatherLocationType };
 };
 
 export type ProfileScreenNavigationProp =

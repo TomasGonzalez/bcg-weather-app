@@ -1,9 +1,11 @@
-import { CountryType } from 'types';
+import { WeatherLocationType } from 'types';
 
-export type CountryListType = CountryType[];
+export type WeatherLocationListType = WeatherLocationType[];
 
 export interface StoreType {
-  countryList: CountryListType | null;
-  addCountry: (country: CountryType) => void;
-  populateCountryList: (newCountryList: CountryListType) => void;
+  weatherLocationList: WeatherLocationListType | null;
+  addWeatherLocation: (weatherLocation: WeatherLocationType) => void;
+  populateWeatherLocationList: (
+    newWeatherLocationList: WeatherLocationListType
+  ) => void;
 }

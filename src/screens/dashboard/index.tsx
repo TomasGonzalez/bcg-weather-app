@@ -6,9 +6,9 @@ import MainView from 'src/components/main-view';
 import useDashboardLogic from './hooks/useDashboardLogic';
 
 const Dashboard = () => {
-  const { countryList, renderItem } = useDashboardLogic();
+  const { weatherLocationList, renderItem } = useDashboardLogic();
 
-  if (!countryList) {
+  if (!weatherLocationList) {
     return (
       <MainView>
         <Text>Fetching Weather...</Text>
@@ -23,7 +23,7 @@ const Dashboard = () => {
           return `${item.id}`;
         }}
         renderItem={renderItem}
-        data={countryList}
+        data={weatherLocationList}
       />
     </MainView>
   );

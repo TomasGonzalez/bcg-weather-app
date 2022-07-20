@@ -1,5 +1,5 @@
 interface SysType {
-  country?: string;
+  weatherLocation?: string;
   id: number;
   sunrise?: number;
   sunset?: number;
@@ -22,7 +22,7 @@ interface MainType {
   temp_min: number;
 }
 
-export interface CountryType {
+export interface WeatherLocationType {
   base: string;
   name?: string;
   coord?: Record<string, number>;

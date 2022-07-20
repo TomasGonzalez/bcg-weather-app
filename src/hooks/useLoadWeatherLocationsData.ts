@@ -8,17 +8,18 @@ import {
 import CONFIG from 'config';
 import useStore from 'src/stores/global-store';
 import client from 'src/api/weather-client';
-import { CountryType } from 'types';
 
 /**
- * useLoadCountries should init the data from all local sources such as
- * the config file (default countries), the async storage into the mainStore,
+ * useLoadWeatherLocations should init the data from all local sources such as
+ * the config file (default weatherLocations), the async storage into the mainStore,
  * and the users locoation.
  */
 
-const useLoadCountries = () => {
-  const populateCountryList = useStore((state) => state.populateCountryList);
-  const addCountry = useStore((state) => state.addCountry);
+const useLoadWeatherLocationsData = () => {
+  const populateWeatherLocationList = useStore(
+    (state) => state.populateWeatherLocationList
+  );
+  const addWeatherLocation = useStore((state) => state.addWeatherLocation);
   const [userLocation, setUserLocation] = useState<null | LocationObject>(null);
   const [errorMsg, setErrorMsg] = useState<null | string>(null);
   const { defaultLocations } = CONFIG;
@@ -31,7 +32,7 @@ const useLoadCountries = () => {
     return locationIds;
   };
 
-  const fetchCountriesDataById = async (locationIds: string) => {
+  const fetchWeatherLocationsDataById = async (locationIds: string) => {
     try {
       const request = await client.get('group', {
         params: {
@@ -39,7 +40,7 @@ const useLoadCountries = () => {
         },
       });
 
-      populateCountryList(request.data.list);
+      populateWeatherLocationList(request.data.list);
     } catch (err) {
       console.log(err, 'err');
     }
@@ -50,7 +51,7 @@ const useLoadCountries = () => {
       const request = await client.get('weather', {
         params: { lat, lon },
       });
-      addCountry({ ...request.data, isUserLocationData: true });
+      addWeatherLocation({ ...request.data, isUserLocationData: true });
     } catch (err) {
       console.log(err, 'err');
     }
@@ -79,8 +80,8 @@ const useLoadCountries = () => {
   useEffect(() => {
     const locationsIds = formatLocationIds(defaultLocations);
     getLocation();
-    fetchCountriesDataById(locationsIds);
+    fetchWeatherLocationsDataById(locationsIds);
   }, []);
 };
 
-export default useLoadCountries;
+export default useLoadWeatherLocationsData;
