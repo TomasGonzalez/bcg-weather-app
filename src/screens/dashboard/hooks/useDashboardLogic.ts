@@ -10,24 +10,24 @@ const useDashboardLogic = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const { countryList } = useStore();
 
-  const goToDescription = () => {
-    navigation.navigate('Details');
+  const goToDescription = (item: CountryType) => {
+    navigation.navigate('Details', { countryData: item });
   };
 
   const renderItem = useCallback(
     ({ item }: { item: CountryType }) =>
-      countryItem({ item, onPress: goToDescription }),
+      countryItem({ item, onPress: () => goToDescription(item) }),
     [goToDescription]
   );
 
   const setCurrentLocationToFirst = useMemo(() => {
     const userLocationData =
-      countryList && countryList.find((item) => !!item?.userLocationData);
+      countryList && countryList.find((item) => !!item?.isUserLocationData);
 
     const orderedCountryData = userLocationData
       ? [
           userLocationData,
-          ...countryList.filter((item) => !item.userLocationData),
+          ...countryList.filter((item) => !item.isUserLocationData),
         ]
       : countryList;
 

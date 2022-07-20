@@ -6,13 +6,15 @@ import {
 
 import Dashboard from 'src/screens/dashboard';
 import Details from 'src/screens/details';
+import { CountryType } from 'types';
 
 const Stack = createNativeStackNavigator();
 
 export type RootStackParamList = {
   Dashboard: undefined;
-  Details: undefined;
+  Details: { countryData: CountryType };
 };
+
 export type ProfileScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
 

@@ -2,11 +2,8 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import Text from 'src/components/text';
-import { CountryType, UnitsEnum } from 'types';
-import CONFIG from 'config';
-import useCountryItemLogic from './hooks/useCountryItemLogic';
-import { useNavigation } from '@react-navigation/native';
-import { ProfileScreenNavigationProp } from 'src/navigators/main-stack-navigator';
+import { CountryType } from 'types';
+import TemperatureDisplay from 'src/components/temperature-display';
 
 type StyledPropsType = { theme: DefaultTheme };
 
@@ -37,8 +34,6 @@ const CurrentLocationText = styled(Text)`
   font-size: 8px;
 `;
 
-const { defaultUnits } = CONFIG;
-
 const countryItem = ({
   item,
   onPress,
@@ -49,13 +44,12 @@ const countryItem = ({
   <MainTouchableOpacity onPress={onPress}>
     <WrapperView>
       <Text>{item.name}</Text>
-      {item.userLocationData && (
+      {item.isUserLocationData && (
         <CurrentLocationText>Current location</CurrentLocationText>
       )}
     </WrapperView>
     <UnitWrapperView>
-      <Text>{item?.main?.temp}</Text>
-      <Text>&deg;{UnitsEnum[defaultUnits]}</Text>
+      <TemperatureDisplay temperatureValue={item?.main?.temp} />
     </UnitWrapperView>
   </MainTouchableOpacity>
 );

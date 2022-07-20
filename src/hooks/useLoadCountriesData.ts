@@ -31,19 +31,6 @@ const useLoadCountries = () => {
     return locationIds;
   };
 
-  const fetchUserLocataionData = async (lat: number, lon: number) => {
-    try {
-      const request = await client.get('weather', {
-        params: { lat, lon },
-      });
-
-      const { main, coord, id, name } = request.data;
-      addCountry({ main, coord, id, name, userLocationData: true });
-    } catch (err) {
-      console.log(err, 'err');
-    }
-  };
-
   const fetchCountriesDataById = async (locationIds: string) => {
     try {
       const request = await client.get('group', {
@@ -52,16 +39,18 @@ const useLoadCountries = () => {
         },
       });
 
-      const filteredCountryData = request.data.list.map(
-        ({ coord, id, name, main }: CountryType) => ({
-          main,
-          coord,
-          id,
-          name,
-        })
-      );
+      populateCountryList(request.data.list);
+    } catch (err) {
+      console.log(err, 'err');
+    }
+  };
 
-      populateCountryList(filteredCountryData);
+  const fetchUserLocataionData = async (lat: number, lon: number) => {
+    try {
+      const request = await client.get('weather', {
+        params: { lat, lon },
+      });
+      addCountry({ ...request.data, isUserLocationData: true });
     } catch (err) {
       console.log(err, 'err');
     }
