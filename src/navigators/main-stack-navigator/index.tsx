@@ -1,14 +1,13 @@
 import React from 'react';
 import {
   createNativeStackNavigator,
-  NativeStackNavigationOptions,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
 
 import Dashboard from 'src/screens/dashboard';
 import Details from 'src/screens/details';
 import { WeatherLocationType } from 'types';
+import theme from 'theme';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +20,17 @@ export type ProfileScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
 
 const MainStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: theme.colors.background,
+      },
+      headerTitleStyle: {
+        color: theme.colors.text,
+      },
+      headerTintColor: theme.colors.text,
+    }}
+  >
     <Stack.Screen name='Dashboard' component={Dashboard} />
     <Stack.Screen
       name='Details'

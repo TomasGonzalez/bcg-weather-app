@@ -1,6 +1,7 @@
-import { ConfigType } from './types/index';
 import { WEATHER_API_KEY } from '@env';
+import { ConfigType } from './types/index';
 
+//Locations by id
 const DEFAULT_LOCATIONS = [
   { id: 2950159 }, //Berlin
   { id: 3492908 }, //Santo Domingo

@@ -39,6 +39,10 @@ export interface WeatherLocationType {
   sys: SysType;
 }
 
+export interface LocationType {
+  id: number;
+}
+
 //Units type uitls
 export type UnitsType = 'metric' | 'imperial' | 'standar';
 
@@ -52,6 +56,6 @@ export interface ConfigType {
   weatherApiURL: string;
   apiKey: string;
   apiTimeout: number;
-  defaultLocations: { id: number }[];
+  defaultLocations: LocationType[];
   defaultUnits: UnitsType;
 }

@@ -1,30 +1,24 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FlatList } from 'react-native';
 
-import Text from 'src/components/text';
 import MainView from 'src/components/main-view';
 import useDashboardLogic from './hooks/useDashboardLogic';
+import HoverAddButton from 'src/components/hover-add-button';
 
 const Dashboard = () => {
-  const { weatherLocationList, renderItem } = useDashboardLogic();
-
-  if (!weatherLocationList) {
-    return (
-      <MainView>
-        <Text>Fetching Weather...</Text>
-      </MainView>
-    );
-  }
+  const { refreshing, onRefresh, weatherLocationList, renderItem } =
+    useDashboardLogic();
 
   return (
     <MainView>
       <FlatList
-        keyExtractor={(item) => {
-          return `${item.id}`;
-        }}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        keyExtractor={(item) => `${item.id}`}
         renderItem={renderItem}
         data={weatherLocationList}
       />
+      <HoverAddButton onPress={() => console.log('test')} />
     </MainView>
   );
 };

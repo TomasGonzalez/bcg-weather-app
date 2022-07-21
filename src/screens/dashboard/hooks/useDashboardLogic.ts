@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { ProfileScreenNavigationProp } from 'src/navigators/main-stack-navigator';
@@ -8,11 +8,20 @@ import { WeatherLocationType } from 'types';
 
 const useDashboardLogic = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  const { weatherLocationList } = useStore();
+  const refreshing = useStore((store) => store.refreshing);
+  const weatherLocationList = useStore((store) => store.weatherLocationList);
+  const refreshAllWeatherLocationData = useStore(
+    (store) => store.refreshAllWeatherLocationData
+  );
 
-  const goToDescription = (item: WeatherLocationType) => {
-    navigation.navigate('Details', { weatherLocationData: item });
-  };
+  const onRefresh = useCallback(() => refreshAllWeatherLocationData(), []);
+
+  const goToDescription = useCallback(
+    (item: WeatherLocationType) => {
+      navigation.navigate('Details', { weatherLocationData: item });
+    },
+    [navigation]
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: WeatherLocationType }) =>
@@ -35,7 +44,12 @@ const useDashboardLogic = () => {
     return orderedWeatherLocationData;
   }, [weatherLocationList]);
 
-  return { weatherLocationList: setCurrentLocationToFirst, renderItem };
+  return {
+    onRefresh,
+    refreshing,
+    weatherLocationList: setCurrentLocationToFirst,
+    renderItem,
+  };
 };
 
 export default useDashboardLogic;
