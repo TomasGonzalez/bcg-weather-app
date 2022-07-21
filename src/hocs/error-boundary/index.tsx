@@ -22,7 +22,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo); //Send it to sentry or something
   }
 
   resetError = () => {
@@ -40,7 +40,10 @@ class ErrorBoundary extends Component<Props, State> {
             alignItems: 'center',
           }}
         >
-          <Text>Sorry.. there was an error</Text>
+          <Text>
+            Sorry.. there was an error.
+            {'\n'} Our team is working on it.
+          </Text>
           <TouchableOpacity
             onPress={this.resetError}
             style={{

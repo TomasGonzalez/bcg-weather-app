@@ -9,13 +9,14 @@ const { defaultUnits } = CONFIG;
 
 const TemperatureDisplay = (
   props: TextProps & {
+    cropValue?: boolean;
     temperatureValue: number | undefined;
   }
 ) => {
-  const { temperatureValue } = props;
+  const { temperatureValue, cropValue } = props;
   return (
     <Text {...props}>
-      {temperatureValue}
+      {cropValue ? Math.round(temperatureValue as number) : temperatureValue}
       &deg;{UnitsEnum[defaultUnits]}
     </Text>
   );

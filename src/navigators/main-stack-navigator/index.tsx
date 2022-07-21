@@ -1,8 +1,10 @@
 import React from 'react';
 import {
   createNativeStackNavigator,
+  NativeStackNavigationOptions,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 
 import Dashboard from 'src/screens/dashboard';
 import Details from 'src/screens/details';
@@ -21,7 +23,13 @@ export type ProfileScreenNavigationProp =
 const MainStackNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen name='Dashboard' component={Dashboard} />
-    <Stack.Screen name='Details' component={Details} />
+    <Stack.Screen
+      name='Details'
+      component={Details}
+      options={({ route }: any) => ({
+        title: route?.params?.weatherLocationData.name,
+      })}
+    />
   </Stack.Navigator>
 );
 
