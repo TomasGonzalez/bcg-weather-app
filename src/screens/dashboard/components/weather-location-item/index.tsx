@@ -34,7 +34,7 @@ const CurrentLocationText = styled(Text)`
   font-size: 8px;
 `;
 
-const weatherLocationItem = ({
+const WeatherLocationItem = ({
   item,
   onPress,
 }: {
@@ -54,4 +54,4 @@ const weatherLocationItem = ({
   </MainTouchableOpacity>
 );
 
-export default weatherLocationItem;
+export default WeatherLocationItem;

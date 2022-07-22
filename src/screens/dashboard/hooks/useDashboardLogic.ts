@@ -1,20 +1,21 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { ProfileScreenNavigationProp } from 'src/navigators/main-stack-navigator';
 import useStore from 'src/stores/global-store';
-import weatherLocationItem from '../components/weather-location-item';
 import { WeatherLocationType } from 'types';
 
 const useDashboardLogic = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const refreshing = useStore((store) => store.refreshing);
+  const userLocation = useStore((store) => store.userLocation);
+  const updateUserCoordsWeather = useStore(
+    (store) => store.updateUserCoordsWeather
+  );
   const weatherLocationList = useStore((store) => store.weatherLocationList);
   const refreshAllWeatherLocationData = useStore(
     (store) => store.refreshAllWeatherLocationData
   );
-
-  const onRefresh = useCallback(() => refreshAllWeatherLocationData(), []);
 
   const goToDescription = useCallback(
     (item: WeatherLocationType) => {
@@ -24,9 +25,19 @@ const useDashboardLogic = () => {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: WeatherLocationType }) =>
-      weatherLocationItem({ item, onPress: () => goToDescription(item) }),
+    ({ item }: { item: WeatherLocationType }, LocationComponent) =>
+      LocationComponent({ item, onPress: () => goToDescription(item) }),
     [goToDescription]
+  );
+
+  const renderHeaderItem = useCallback(
+    (HeaderComponent) =>
+      !userLocation
+        ? HeaderComponent({
+            onPress: updateUserCoordsWeather,
+          })
+        : null,
+    [userLocation]
   );
 
   const setCurrentLocationToFirst = useMemo(() => {
@@ -45,10 +56,11 @@ const useDashboardLogic = () => {
   }, [weatherLocationList]);
 
   return {
-    onRefresh,
+    onRefresh: refreshAllWeatherLocationData,
     refreshing,
     weatherLocationList: setCurrentLocationToFirst,
     renderItem,
+    renderHeaderItem,
   };
 };
 

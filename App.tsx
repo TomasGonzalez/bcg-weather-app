@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
+import Toast from 'react-native-toast-message';
 
 import MainRouter from 'src/navigators';
 import MainSafeAreaView from 'src/components/main-safe-area-view';
@@ -14,6 +15,7 @@ export default function App() {
       <MainSafeAreaView>
         <ErrorBoundary>
           <MainRouter />
+          <Toast />
         </ErrorBoundary>
       </MainSafeAreaView>
     </ThemeProvider>

@@ -1,3 +1,4 @@
+import Toast from 'react-native-toast-message';
 import create from 'zustand';
 import {
   getCurrentPositionAsync,
@@ -18,7 +19,12 @@ const useStore = create<StoreType>()((set, get) => ({
   updateUserCoordsWeather: async () => {
     const { status } = await requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      console.log('Display error message'); //alert
+      Toast.show({
+        type: 'error',
+        text1: 'GPS permission not granted!',
+        text2:
+          'Please enable GPS permissions in order to view your local weather.',
+      });
       return;
     }
     const userLocation = await getCurrentPositionAsync({});
@@ -53,7 +59,12 @@ const useStore = create<StoreType>()((set, get) => ({
       get().addWeatherLocations([{ ...data, isUserLocationData }]);
       if (isUserLocationData) set({ userLocationId: data.id });
     } catch (err) {
-      console.log(err, 'err');
+      Toast.show({
+        type: 'error',
+        text1: 'Upps! There Was an error while fetching weather data!',
+        text2: 'Our team is working on it!',
+      });
+      console.log(err, 'err'); //send error to sentry or something.
     }
     set({ refreshing: false });
   },
@@ -75,7 +86,12 @@ const useStore = create<StoreType>()((set, get) => ({
 
       get().addWeatherLocations(listWithUserLocationData);
     } catch (err) {
-      console.log(err, 'err');
+      Toast.show({
+        type: 'error',
+        text1: 'Upps! There Was an error while fetching weather data!',
+        text2: 'Our team is working on it!',
+      });
+      console.log(err, 'err'); //send error to sentry or something.
     }
     set({ refreshing: false });
   },
