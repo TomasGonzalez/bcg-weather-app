@@ -1,4 +1,5 @@
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import create from 'zustand';
 import {
   getCurrentPositionAsync,
@@ -11,8 +12,19 @@ import { StoreType } from './types';
 import { formatLocationIds } from 'src/utils/formatIds';
 import client from 'src/api';
 import { LocationType } from './../../../types/index';
+import CONFIG from 'config';
 
 const useStore = create<StoreType>()((set, get) => ({
+  unitSystem: CONFIG.defaultUnits,
+  setUnitSystem: async (unit) => {
+    await AsyncStorage.setItem(CONFIG.unitsSettingsDeviceStorage, unit);
+    set({ unitSystem: unit });
+  },
+  updateUnitSystem: async (unit) => {
+    await get().setUnitSystem(unit);
+    set({ unitSystem: unit });
+    get().refreshAllWeatherLocationData();
+  },
   weatherLocationList: [],
   userLocationId: null,
   userLocation: null,
@@ -21,9 +33,9 @@ const useStore = create<StoreType>()((set, get) => ({
     if (status !== 'granted') {
       Toast.show({
         type: 'error',
-        text1: 'GPS permission not granted!',
+        text1: 'Upps! There was an error!',
         text2:
-          'Please enable GPS permissions in order to view your local weather.',
+          'There was an error while fetching weather data. Our team is working on it!',
       });
       return;
     }
@@ -31,22 +43,39 @@ const useStore = create<StoreType>()((set, get) => ({
     set({ userLocation });
     get().updateWeatherLocationByCoords(userLocation, true);
   },
-  addWeatherLocations: (weatherLocations: WeatherLocationType[]) =>
-    set((state) => {
-      const filteredWeatherLocationList = state.weatherLocationList.filter(
+  addWeatherLocations: async (weatherLocations: WeatherLocationType[]) => {
+    const filteredWeatherLocationList = get().weatherLocationList.filter(
+      (weatherLocation: WeatherLocationType) =>
+        !weatherLocations.some(
+          (updatedWeatherLocation: WeatherLocationType) =>
+            weatherLocation.id === updatedWeatherLocation.id
+        )
+    );
+
+    const newWeatherLocationList = [
+      ...filteredWeatherLocationList,
+      ...weatherLocations,
+    ];
+
+    const locationsIdsToSave = newWeatherLocationList
+      .filter(
         (weatherLocation: WeatherLocationType) =>
-          !weatherLocations.some(
-            (updatedWeatherLocation: WeatherLocationType) =>
-              weatherLocation.id === updatedWeatherLocation.id
-          )
+          !CONFIG.defaultLocations
+            .map(({ id }: LocationType) => id)
+            .includes(weatherLocation.id) && !weatherLocation.isUserLocationData
+      )
+      .map(({ id }: LocationType) => ({ id }));
+
+    if (locationsIdsToSave.length) {
+      await AsyncStorage.setItem(
+        'bcg-weather-saved-locations',
+        JSON.stringify(locationsIdsToSave)
       );
-      return {
-        weatherLocationList: [
-          ...filteredWeatherLocationList,
-          ...weatherLocations,
-        ],
-      };
-    }),
+    }
+    set({
+      weatherLocationList: newWeatherLocationList,
+    });
+  },
   updateWeatherLocationByCoords: async (
     { coords }: LocationObject,
     isUserLocationData = false
@@ -54,15 +83,20 @@ const useStore = create<StoreType>()((set, get) => ({
     set({ refreshing: true });
     try {
       const { data } = await client.get('weather', {
-        params: { lat: coords.latitude, lon: coords.longitude },
+        params: {
+          lat: coords.latitude,
+          lon: coords.longitude,
+          units: get().unitSystem,
+        },
       });
       get().addWeatherLocations([{ ...data, isUserLocationData }]);
       if (isUserLocationData) set({ userLocationId: data.id });
     } catch (err) {
       Toast.show({
         type: 'error',
-        text1: 'Upps! There Was an error while fetching weather data!',
-        text2: 'Our team is working on it!',
+        text1: 'Upps! There was an error!',
+        text2:
+          'There was an error while fetching weather data. Our team is working on it!',
       });
       console.log(err, 'err'); //send error to sentry or something.
     }
@@ -74,6 +108,7 @@ const useStore = create<StoreType>()((set, get) => ({
       const { data } = await client.get('group', {
         params: {
           id: formatLocationIds(locationsIdList),
+          units: get().unitSystem,
         },
       });
 
@@ -85,12 +120,21 @@ const useStore = create<StoreType>()((set, get) => ({
       );
 
       get().addWeatherLocations(listWithUserLocationData);
-    } catch (err) {
-      Toast.show({
-        type: 'error',
-        text1: 'Upps! There Was an error while fetching weather data!',
-        text2: 'Our team is working on it!',
-      });
+    } catch (err: any) {
+      const errMessage =
+        err?.code === 'ERR_BAD_REQUEST'
+          ? {
+              type: 'error',
+              text1: 'Error',
+              text2: 'Seems that the entered Id is not valid!',
+            }
+          : {
+              type: 'error',
+              text1: 'Upss! There Was an error while fetching weather data!',
+              text2: 'Our team is working on it!',
+            };
+
+      Toast.show(errMessage);
       console.log(err, 'err'); //send error to sentry or something.
     }
     set({ refreshing: false });

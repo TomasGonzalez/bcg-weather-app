@@ -53,6 +53,8 @@ export enum UnitsEnum {
 }
 
 export interface ConfigType {
+  locationsDeviceStorage: string;
+  unitsSettingsDeviceStorage: string;
   weatherApiURL: string;
   apiKey: string;
   apiTimeout: number;

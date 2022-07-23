@@ -6,6 +6,7 @@ import useDashboardLogic from './hooks/useDashboardLogic';
 import HoverAddButton from 'src/components/hover-add-button';
 import WeatherLocationItem from './components/weather-location-item';
 import WeatherLocationHeader from './components/weather-location-header';
+import AddLocationModal from './components/add-location-modal';
 
 const Dashboard = () => {
   const {
@@ -14,6 +15,8 @@ const Dashboard = () => {
     weatherLocationList,
     renderItem,
     renderHeaderItem,
+    isModalVisible,
+    setIsModalVisible,
   } = useDashboardLogic();
 
   return (
@@ -26,7 +29,11 @@ const Dashboard = () => {
         ListHeaderComponent={() => renderHeaderItem(WeatherLocationHeader)}
         data={weatherLocationList}
       />
-      <HoverAddButton onPress={() => console.log('test')} />
+      <HoverAddButton onPress={() => setIsModalVisible(!isModalVisible)} />
+      <AddLocationModal
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(!isModalVisible)}
+      />
     </MainView>
   );
 };

@@ -12,6 +12,8 @@ const CONFIG: ConfigType = {
   apiKey: WEATHER_API_KEY,
   apiTimeout: 1000,
   defaultLocations: DEFAULT_LOCATIONS,
+  locationsDeviceStorage: 'bcg-weather-saved-locations',
+  unitsSettingsDeviceStorage: 'bcg-sattings-saved-units',
   defaultUnits: 'metric',
 };
 

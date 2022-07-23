@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { ProfileScreenNavigationProp } from 'src/navigators/main-stack-navigator';
@@ -6,6 +6,7 @@ import useStore from 'src/stores/global-store';
 import { WeatherLocationType } from 'types';
 
 const useDashboardLogic = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const refreshing = useStore((store) => store.refreshing);
   const userLocation = useStore((store) => store.userLocation);
@@ -56,6 +57,8 @@ const useDashboardLogic = () => {
   }, [weatherLocationList]);
 
   return {
+    isModalVisible,
+    setIsModalVisible,
     onRefresh: refreshAllWeatherLocationData,
     refreshing,
     weatherLocationList: setCurrentLocationToFirst,

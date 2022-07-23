@@ -1,7 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Button, View } from 'react-native';
 import Text from 'src/components/text';
-import theme from 'theme';
 
 interface Props {
   children?: ReactNode;
@@ -44,16 +43,7 @@ class ErrorBoundary extends Component<Props, State> {
             Sorry.. there was an error.
             {'\n'} Our team is working on it.
           </Text>
-          <TouchableOpacity
-            onPress={this.resetError}
-            style={{
-              backgroundColor: theme.colors.primary,
-              padding: theme.defaultPadding,
-              marginTop: theme.defaultPadding,
-            }}
-          >
-            <Text>Try again.</Text>
-          </TouchableOpacity>
+          <Button onPress={this.resetError} title={'Try again'} />
         </View>
       );
     }
