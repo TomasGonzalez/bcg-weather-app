@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, Text, TouchableOpacityBase } from 'react-native';
+import { FlatList } from 'react-native';
 
 import MainView from 'src/components/main-view';
 import useDashboardLogic from './hooks/useDashboardLogic';

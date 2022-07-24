@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { Modal, Button, ModalProps } from 'react-native';
 
 import Text from 'src/components/text';
-import useStore from 'src/stores/global-store';
 import styled, { ThemeProps } from 'styled-components/native';
+import useAddLocationLogic from './hooks/useAddLocationLogic';
 
 const MainContainerTouchableOpacity = styled.TouchableOpacity`
   flex: 1;
@@ -28,17 +28,9 @@ const ModalView = styled.View`
 `;
 
 const AddLocationModal = ({ onRequestClose, visible }: ModalProps) => {
-  const [modalText, setModalText] = useState<null | number>(null);
-  const updateWeatherLocationsByIds = useStore(
-    (store) => store.updateWeatherLocationsByIds
-  );
-
-  const addLocationById = useCallback(() => {
-    if (modalText) {
-      updateWeatherLocationsByIds([{ id: modalText }]);
-      onRequestClose && onRequestClose();
-    }
-  }, [modalText]);
+  const { setModalText, modalText, addLocationById } = useAddLocationLogic({
+    onRequestClose,
+  });
 
   return (
     <Modal

@@ -1,14 +1,12 @@
 import React from 'react';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import moment from 'moment';
 import styled, { ThemeProps } from 'styled-components';
 import { View, StyleSheet } from 'react-native';
 
 import MainView from 'src/components/main-view';
 import Text from 'src/components/text';
-import { RootStackParamList } from 'src/navigators/main-stack-navigator';
 import TemperatureDisplay from 'src/components/temperature-display';
 import theme from 'theme';
+import useDetailsLogic from './hooks/useDetailsLogic';
 
 const StyledMainView = styled(MainView)`
   justify-content: space-between;
@@ -60,15 +58,7 @@ const HorizontalWrapperView = styled.View`
 `;
 
 function Details() {
-  const route = useRoute<RouteProp<RootStackParamList, 'Details'>>();
-  const { weatherLocationData } = route?.params;
-
-  //separate this logic form the view
-  const getDateValue = (date: number) => {
-    const _date = new Date((date * 1000) as number);
-
-    return moment(_date).format('LT');
-  };
+  const { weatherLocationData, getDateValue } = useDetailsLogic();
 
   return (
     <StyledMainView>
