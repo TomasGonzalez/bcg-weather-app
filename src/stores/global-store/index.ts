@@ -11,15 +11,11 @@ import { WeatherLocationType } from 'types';
 import { StoreType } from './types';
 import { formatLocationIds } from 'src/utils/formatIds';
 import client from 'src/api';
-import { LocationType, UnitsType } from './../../../types/index';
+import { LocationType } from './../../../types/index';
 import CONFIG from 'config';
 
-const initialUnitSystem = ((): UnitsType => {
-  return 'metric';
-})();
-
 const useStore = create<StoreType>()((set, get) => ({
-  unitSystem: initialUnitSystem,
+  unitSystem: CONFIG.defaultUnits,
   setUnitSystem: async (unit) => {
     await AsyncStorage.setItem(CONFIG.unitsSettingsDeviceStorage, unit);
     set({ unitSystem: unit });
