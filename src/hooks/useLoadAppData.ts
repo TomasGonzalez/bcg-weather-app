@@ -25,9 +25,7 @@ const useLoadAppData = () => {
   const loadConfigs = useCallback(async () => {
     const selectedUnit = await AsyncStorage.getItem(unitsSettingsDeviceStorage);
     if (selectedUnit) setUnitSystem(selectedUnit as UnitsType);
-  }, []);
 
-  const loadWeatherData = useCallback(async () => {
     const deviceStoredLocations = await AsyncStorage.getItem(
       locationsDeviceStorage
     );
@@ -36,14 +34,13 @@ const useLoadAppData = () => {
       ? [...defaultLocations, ...JSON.parse(deviceStoredLocations)]
       : defaultLocations;
 
-    updateWeatherLocationsByIds(selectedLocations);
     updateUserCoordsWeather();
+    updateWeatherLocationsByIds(selectedLocations);
   }, []);
 
   useEffect(() => {
     loadConfigs();
-    loadWeatherData();
-  }, [loadWeatherData]);
+  }, [loadConfigs]);
 };
 
 export default useLoadAppData;

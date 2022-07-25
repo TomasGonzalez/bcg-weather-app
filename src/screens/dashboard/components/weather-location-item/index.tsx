@@ -41,7 +41,7 @@ const WeatherLocationItem = ({
   item: WeatherLocationType;
   onPress: () => void;
 }) => (
-  <MainTouchableOpacity onPress={onPress}>
+  <MainTouchableOpacity testID={'listItem'} onPress={onPress}>
     <WrapperView>
       <Text>{item.name}</Text>
       {item.isUserLocationData && (

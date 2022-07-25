@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { ProfileScreenNavigationProp } from 'src/navigators/main-stack-navigator';

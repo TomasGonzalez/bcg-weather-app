@@ -11,18 +11,21 @@ import { WeatherLocationType } from 'types';
 import { StoreType } from './types';
 import { formatLocationIds } from 'src/utils/formatIds';
 import client from 'src/api';
-import { LocationType } from './../../../types/index';
+import { LocationType, UnitsType } from './../../../types/index';
 import CONFIG from 'config';
 
+const initialUnitSystem = ((): UnitsType => {
+  return 'metric';
+})();
+
 const useStore = create<StoreType>()((set, get) => ({
-  unitSystem: CONFIG.defaultUnits,
+  unitSystem: initialUnitSystem,
   setUnitSystem: async (unit) => {
     await AsyncStorage.setItem(CONFIG.unitsSettingsDeviceStorage, unit);
     set({ unitSystem: unit });
   },
   updateUnitSystem: async (unit) => {
     await get().setUnitSystem(unit);
-    set({ unitSystem: unit });
     get().refreshAllWeatherLocationData();
   },
   weatherLocationList: [],
@@ -34,8 +37,7 @@ const useStore = create<StoreType>()((set, get) => ({
       Toast.show({
         type: 'error',
         text1: 'Upps! There was an error!',
-        text2:
-          'There was an error while fetching weather data. Our team is working on it!',
+        text2: "Couldn't fetch the current location wether!",
       });
       return;
     }
@@ -96,7 +98,7 @@ const useStore = create<StoreType>()((set, get) => ({
         type: 'error',
         text1: 'Upps! There was an error!',
         text2:
-          'There was an error while fetching weather data. Our team is working on it!',
+          'There was an error while fetching weather. Our team is working on it!',
       });
       console.log(err, 'err'); //send error to sentry or something.
     }
@@ -112,6 +114,7 @@ const useStore = create<StoreType>()((set, get) => ({
         },
       });
 
+      //Pass the isUserLocationData flag
       const listWithUserLocationData = data.list.map(
         (location: WeatherLocationType) =>
           location.id === get().userLocationId
@@ -120,8 +123,9 @@ const useStore = create<StoreType>()((set, get) => ({
       );
 
       get().addWeatherLocations(listWithUserLocationData);
-    } catch (err: any) {
+    } catch (err) {
       const errMessage =
+        // @ts-ignore For some reason "err: any" crashes on web.
         err?.code === 'ERR_BAD_REQUEST'
           ? {
               type: 'error',
